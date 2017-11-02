@@ -41,4 +41,5 @@ def sum_all_columns(dataframe, week='all', month='all'):
 
 df = init_dataframe('tweet_log.json')
 print(sum_all_columns(df))
+print(sum_all_columns(df, week='44'))
 
