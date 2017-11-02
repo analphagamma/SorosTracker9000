@@ -95,6 +95,7 @@ def crawl_websites(websites):
 		print('Getting news from {}'.format(name))
 		todays_links = obj.parse_links()
 		print('Number of articles found: ', len(todays_links))
+		
 		#logging links
 		simple_log(name, todays_links)
 		todays_articles[name] = len(todays_links)
