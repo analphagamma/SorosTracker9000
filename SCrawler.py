@@ -49,14 +49,20 @@ class SorosCrawler(object):
 					if not re.search(self.url, link):
 						#sometimes the href doesn't have the full, absolute path
 						link = self.url + link
+					if link[0] == '/':
+						#no double slashes
+						link[0] = ''
 					if link[:4] != 'http':
 						#sometimes links are from the absolute path but requests needs the http too.
 						link = 'http' + link
 					
-					html = requests.get(link).content
-					soup = BeautifulSoup(html, 'html.parser')
-					
-					links.append((soup.title.string.strip('\n').strip(), link))
+					try:
+						html = requests.get(link).content
+					except:
+						print('Requests encountered an error with the link:\n', link)
+					else:
+						soup = BeautifulSoup(html, 'html.parser')
+						links.append((soup.title.string.strip('\n').strip(), link))
 
 		return links #list of tuples (article title, article link)
 
@@ -75,13 +81,14 @@ def simple_log(source_website, links):
 	with open('tweet_log.json', 'w+') as f: json.dump(tweet_log, f)
 	print('Links for {} logged for {}'.format(source_website, date.today()))
 	f.close()
+	
 
 def crawl_websites(websites):
 	'''collects all the articles from all sources
 	   then picks out the sources that has the most articles
-	   and returns the links in list
-	   
-	   takes a dictionary as an argument {source name: link to source's main page}'''
+	   	   
+	   [In] -> takes a dictionary as an argument {source name: link to source's main page}
+	   [Out] -> dict {source: list of links}'''
 	
 	todays_articles = {}
 	
@@ -92,12 +99,29 @@ def crawl_websites(websites):
 		   
 		obj = SorosCrawler(name, url)
 		
-		print('Getting news from {}'.format(name))
+		print('\nGetting news from {}'.format(name))
 		todays_links = obj.parse_links()
 		print('Number of articles found: ', len(todays_links))
 		
 		#logging links
+		with open('links.txt', 'r+') as f: linkdb = f.read().split('\n')
+		for link in todays_links:
+			#removing the ones that are already in the db
+			if link[1] in linkdb:
+				todays_links.remove(link)
+				print('Link already in list')
+			else:
+				print('New article found.')
+				
 		simple_log(name, todays_links)
-		todays_articles[name] = len(todays_links)
+		todays_articles[name] = todays_links
 		
 	return todays_articles
+
+if __name__ == '__main__':
+	NEWS_SOURCES = {'Magyar Hírlap': 'http://magyarhirlap.hu/',
+				'Hirado.hu': 'http://www.hirado.hu/',
+				'Magyar Idők': 'http://magyaridok.hu/',
+				'Origo.hu': 'http://www.origo.hu/',
+				'888.hu': 'http://888.hu/'}
+	print(crawl_websites(NEWS_SOURCES))
