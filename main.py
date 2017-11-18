@@ -16,11 +16,12 @@ NEWS_SOURCES = {'Magyar Hírlap': 'http://magyarhirlap.hu',
 				'Origo.hu': 'http://www.origo.hu',
 				'888.hu': 'http://888.hu/'}
 				
-DAILY_MESSAGES = ['Ma ennyire volt fontos Sorossal foglalkozni.',
-				  'Ma is lelepleztük Sorost!',
-				  'Egy lépéssel közelebb a leleplezéshez.',
-				  'Nem alszunk!',
-				  'Nem hagytuk!']
+DAILY_MESSAGES = ['\nMa ennyire volt fontos Sorossal foglalkozni.',
+				  '\nMa is lelepleztük Sorost!',
+				  '\nEgy lépéssel közelebb a megváltáshoz.',
+				  '\nNem alszunk!',
+				  '\nNem hagytuk!',
+                  '\nMegint sokat foglalkoztunk Sorossal!']
 
 def main():
 	''' main function that creates the bot object
@@ -41,7 +42,8 @@ def main():
 		
 		
 		stat_obj = Table('tweet_log.json')
-		d_message = DAILY_MESSAGES[randint(0, len(DAILY_MESSAGES)-1)]
+		##TODO// if no articles were posted the tweet should say something different
+        d_message = DAILY_MESSAGES[randint(0, len(DAILY_MESSAGES)-1)]
 		
 		SorosTrackerBot.tweet('Ma ennyi cikk jelent meg Sorosról.\n#Soros #SorosTerv\n' +
                               stat_obj.sum_today().to_string() +
