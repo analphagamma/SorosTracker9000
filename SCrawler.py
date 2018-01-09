@@ -116,15 +116,18 @@ def crawl_websites(websites):
 
         #logging links
         with open('links.txt', 'r+') as f: linkdb = f.read().split('\n')
+        rejected_links = []
         for link in todays_links:
             print(link)
             #removing the ones that are already in the db
             if link[1] in linkdb:
-                todays_links.remove(link)
+                rejected_links.append(link)
                 print('Link already in list')
             else:
                 print('New article found.')
-
+        
+        for link in rejected_links:
+            todays_links.remove(link)
 
         simple_log(name, todays_links)
         todays_articles[name] = todays_links
