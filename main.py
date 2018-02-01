@@ -52,6 +52,13 @@ def main():
               stat_obj.sum_today().to_string() +
               '\n#Soros #SorosTerv\n' +
               d_message)
+
+    def tweet_weekly_stats():
+
+        stat_obj = Table('tweet_log.json')
+        SorosTrackerBot.tweet('Múlt héten ennyit foglalkozott a média Sorossal.\n#Soros #SorosTerv #StopSoros\n' +
+                              stat_obj.sum_all_columns(week=(dt.date.today().isocalendar()[1] - 1)).to_string() +
+                              'Hát így.')
     
     def tweet_articles():   
         ''' loops through today's links
@@ -74,6 +81,9 @@ def main():
     
     tweet_articles()
     tweet_daily_stats()
+    if dt.date().today().isocalendar()[1] != (dt.date.today() - dt.timedelta(days=1)).isocalendar()[1]:
+        tweet_weekly_stats()
+
     
             
 if __name__ == '__main__':

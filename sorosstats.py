@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import datetime as dt
 
 
 class Table(object):
@@ -54,4 +55,4 @@ class Table(object):
 		
 if __name__ == '__main__':
 	obj = Table('tweet_log.json')
-	print(obj.sum_today())
+	print(obj.sum_all_columns(week=(dt.date.today().isocalendar()[1] - 1)))
