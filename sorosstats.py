@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import datetime as dt
+import matplotlib.pyplot as plt
 
 
 class Table(object):
@@ -17,7 +18,6 @@ class Table(object):
 		self.df = pd.DataFrame(tweet_log).T
 		self.df.index = pd.to_datetime(self.df.index)
 		self.df.fillna(0, inplace=True)
-		#print(type(self.df['Origo.hu'][0]))
 		self.df = self.df.astype('int64', inplace=True)
 		
 	def show_all(self):
@@ -51,8 +51,24 @@ class Table(object):
 				
 		today = pd.Timestamp("today").strftime("%Y-%m-%d")	
 		return (self.df[self.df.index == today].max().idxmax(), self.df[self.df.index == today].max().max())
-		
+
+class SorosPlot(object):
+
+    def __init__(self, df_object):
+        self.df_object = df_object
+
+    def filter_to_month(self, article_month):
+        monthly_articles = self.df_object.df[self.df_object.df.index.month == article_month]
+        return monthly_articles.sum(axis=1).plot(x='Dátum', y='Cikkek', title='Havi Cikkek')
+
+    def save_plot_image(self, dataframe, name, show=False):
+        dataframe.plot()
+        plt.savefig(name+'.png')
+        if show == True: plt.show()		
 		
 if __name__ == '__main__':
-	obj = Table('tweet_log.json')
-	print(obj.sum_all_columns(week=(dt.date.today().isocalendar()[1] - 1)))
+    obj = Table('tweet_log.json')
+    plot_obj = SorosPlot(obj)
+    print(obj.sum_all_columns(month=2))
+    plot_obj.save_plot_image(plot_obj.filter_to_month(2), 'testimage', True)
+
