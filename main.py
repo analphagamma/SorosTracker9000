@@ -31,8 +31,8 @@ def main():
     
     SorosTrackerBot = TwitterAPI()
     print('Bot initialized.')
-    links = SCrawler.crawl_websites(NEWS_SOURCES)
-    print('Crawling done.\n')
+    #links = SCrawler.crawl_websites(NEWS_SOURCES)
+    #print('Crawling done.\n')
     
     def tweet_daily_stats():
         ''' crawls NEWS SOURCE websites
@@ -57,14 +57,14 @@ def main():
 
         stat_obj = Table('tweet_log.json')
         SorosTrackerBot.tweet('Múlt héten ennyit foglalkozott a média Sorossal.\n#Soros #SorosTerv #StopSoros\n' +
-                              stat_obj.sum_all_columns(week.to_string()) +
-                              'Hát így.')
+                              stat_obj.sum_all_columns(week).to_string() +
+                              '\nHát így.')
     def tweet_monthly_stats(month):
 
         stat_obj = Table('tweet_log.json')
         SorosTrackerBot.tweet('Múlt hónapban ennyit foglalkozott a média Sorossal.\n#Soros #SorosTerv #StopSoros\n' +
-                              stat_obj.sum_all_columns(month.to_string()) +
-                              'Ez van')
+                              stat_obj.sum_all_columns(month).to_string() +
+                              '\nEz van')
     
     def tweet_articles():   
         ''' loops through today's links
@@ -85,8 +85,8 @@ def main():
                 time.sleep(1) #let's not overload Twitter
                 print('Tweeting link for ', title) 
     
-    tweet_articles()
-    tweet_daily_stats()
+    #tweet_articles()
+    #tweet_daily_stats()
     if date.today().weekday() == 0:
         tweet_weekly_stats((date.today().isocalendar()[1] - 1))
     if date.today().day == 1:
