@@ -10,11 +10,11 @@ from datetime import date
 from twitteragent import *
 from random import randint
 
-NEWS_SOURCES = {'Magyar Hírlap': 'http://magyarhirlap.hu/',
-                'Hirado.hu': 'http://www.hirado.hu/',
-                'Magyar Idők': 'http://magyaridok.hu/',
-                'Origo.hu': 'http://www.origo.hu/',
-                '888.hu': 'http://888.hu/'}
+NEWS_SOURCES = {'@magyar_hirlap': 'http://magyarhirlap.hu/',
+                '@M1Hirado': 'http://www.hirado.hu/',
+                '@MInapilap': 'http://magyaridok.hu/',
+                '@Origo_hu': 'http://www.origo.hu/',
+                '@888ponthu': 'http://888.hu/'}
                 
 DAILY_MESSAGES = ['\nMa ennyire volt fontos Sorossal foglalkozni.',
                   '\nMa is lelepleztük Sorost!',
@@ -31,8 +31,8 @@ def main():
     
     SorosTrackerBot = TwitterAPI()
     print('Bot initialized.')
-    #links = SCrawler.crawl_websites(NEWS_SOURCES)
-    #print('Crawling done.\n')
+    links = SCrawler.crawl_websites(NEWS_SOURCES)
+    print('Crawling done.\n')
     
     def tweet_daily_stats():
         ''' crawls NEWS SOURCE websites
@@ -50,19 +50,19 @@ def main():
                               d_message)
         print('Ma ennyi cikk jelent meg Sorosról:\n' +
               stat_obj.sum_today().to_string() +
-              '\n#Soros #SorosTerv\n' +
+              '\n#Soros #SorosTerv\n #sorosbots\n' +
               d_message)
 
     def tweet_weekly_stats(week):
 
         stat_obj = Table('tweet_log.json')
-        SorosTrackerBot.tweet('Múlt héten ennyit foglalkozott a média Sorossal.\n#Soros #SorosTerv #StopSoros\n' +
+        SorosTrackerBot.tweet('Múlt héten ennyit foglalkozott a média Sorossal.\n#Soros #SorosTerv #StopSoros\n#sorosbots\n' +
                               stat_obj.sum_all_columns(week).to_string() +
                               '\nHát így.')
     def tweet_monthly_stats(month):
 
         stat_obj = Table('tweet_log.json')
-        SorosTrackerBot.tweet('Múlt hónapban ennyit foglalkozott a média Sorossal.\n#Soros #SorosTerv #StopSoros\n' +
+        SorosTrackerBot.tweet('Múlt hónapban ennyit foglalkozott a média Sorossal.\n#Soros #SorosTerv #StopSoros\n#sorosbots\n' +
                               stat_obj.sum_all_columns(month).to_string() +
                               '\nEz van')
     
@@ -85,8 +85,8 @@ def main():
                 time.sleep(1) #let's not overload Twitter
                 print('Tweeting link for ', title) 
     
-    #tweet_articles()
-    #tweet_daily_stats()
+    tweet_articles()
+    tweet_daily_stats()
     if date.today().weekday() == 0:
         tweet_weekly_stats((date.today().isocalendar()[1] - 1))
     if date.today().day == 1:

@@ -57,6 +57,10 @@ class SorosPlot(object):
     def __init__(self, df_object):
         self.df_object = df_object
 
+    def filter_to_quarter(self, article_quarter):
+        quarterly_articles = self.df_object.df[self.df_object.df.index.quarter == article_quarter]
+        return quarterly_articles.sum(axis=1).plot(x='Dátum', y='Cikkek', title='Negyedévi Cikkek')
+        
     def filter_to_month(self, article_month):
         monthly_articles = self.df_object.df[self.df_object.df.index.month == article_month]
         return monthly_articles.sum(axis=1).plot(x='Dátum', y='Cikkek', title='Havi Cikkek')
@@ -70,5 +74,5 @@ if __name__ == '__main__':
     obj = Table('tweet_log.json')
     plot_obj = SorosPlot(obj)
     print(obj.sum_all_columns(month=2))
-    plot_obj.save_plot_image(plot_obj.filter_to_month(2), 'testimage', True)
+    plot_obj.save_plot_image(plot_obj.filter_to_quarter(1), '2018Q1', True)
 
