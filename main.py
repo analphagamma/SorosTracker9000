@@ -10,11 +10,11 @@ from datetime import date
 from twitteragent import *
 from random import randint
 
-NEWS_SOURCES = {'@magyar_hirlap': 'http://magyarhirlap.hu/',
-                '@M1Hirado': 'http://www.hirado.hu/',
-                '@MInapilap': 'http://magyaridok.hu/',
-                '@Origo_hu': 'http://www.origo.hu/',
-                '@888ponthu': 'http://888.hu/'}
+NEWS_SOURCES = {'Magyar Hírlap': 'http://magyarhirlap.hu/',
+                'Hirado.hu': 'http://www.hirado.hu/',
+                'Magyar Idők': 'http://magyaridok.hu/',
+                'Origo.hu': 'http://www.origo.hu/',
+                '888.hu': 'http://888.hu/'}
                 
 DAILY_MESSAGES = ['\nMa ennyire volt fontos Sorossal foglalkozni.',
                   '\nMa is lelepleztük Sorost!',
@@ -45,7 +45,7 @@ def main():
         ##TODO// if no articles were posted the tweet should say something different
         d_message = DAILY_MESSAGES[randint(0, len(DAILY_MESSAGES)-1)]
         
-        SorosTrackerBot.tweet('Ma ennyi cikk jelent meg Sorosról.\n#Soros #SorosTerv\n' +
+        SorosTrackerBot.tweet('Ma ennyi cikk jelent meg Sorosról.\n#Soros #SorosTerv\n #sorosbots\n' +
                               stat_obj.sum_today().to_string() +
                               d_message)
         print('Ma ennyi cikk jelent meg Sorosról:\n' +
